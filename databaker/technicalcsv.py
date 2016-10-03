@@ -1,5 +1,6 @@
 import re
 import xypath
+import warnings
 from utf8csv import UnicodeWriter
 
 # If there's a custom template, use it. Otherwise use the default.
@@ -9,6 +10,17 @@ try:
 except ImportError:
     import structure_csv_default as template
     from structure_csv_default import *
+
+def rewrite_headers(row,dims):
+    for i in range(0,len(row)):
+        if i >= len(template.start.split(',')):
+            which_cell_in_spread = (i - len(template.start.split(','))) % len(template.value_spread)
+            which_dim = (i - len(template.start.split(','))) / len(template.value_spread)
+            which_dim = int(which_dim)
+            if value_spread[which_cell_in_spread] == 'value':
+                row[i] = dims[which_dim]
+    return row
+
 
 
 def dim_name(dimension):

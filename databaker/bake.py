@@ -24,12 +24,12 @@ from timeit import default_timer as timer
 from docopt import docopt
 import xypath
 import xypath.loader
-from utf8csv import UnicodeWriter
 import os.path
 from technicalcsv import TechnicalCSV
 
-import bake
+import bake   # this has to go
 from constants import *
+
 import overrides        # warning: changes xypath and messytables
 import warnings
 import xlutils.copy
@@ -51,18 +51,6 @@ __version__ = "1.0.7"
 Opt = None
 crash_msg = []
 
-def dim_name(dimension):
-    if isinstance(dimension, int) and dimension <= 0:
-        # the last dimension is dimension 0; but we index it as -1.
-        return template.dimension_names[dimension-1]
-    else:
-        return dimension
-
-# should agree with constants.py
-
-class DimensionError(Exception):
-    pass
-
 
 def showtime(msg='unspecified'):
     if not Opt or not Opt.timing:
@@ -77,16 +65,6 @@ def onexit():
 
 start = timer()
 last = start
-
-def rewrite_headers(row,dims):
-    for i in range(0,len(row)):
-        if i >= len(template.start.split(',')):
-            which_cell_in_spread = (i - len(template.start.split(','))) % len(template.value_spread)
-            which_dim = (i - len(template.start.split(','))) / len(template.value_spread)
-            which_dim = int(which_dim)
-            if value_spread[which_cell_in_spread] == 'value':
-                row[i] = dims[which_dim]
-    return row
 
 
 
