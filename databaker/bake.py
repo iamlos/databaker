@@ -64,7 +64,7 @@ class DimensionError(Exception):
 
 
 def showtime(msg='unspecified'):
-    if not Opt.timing:
+    if not Opt or not Opt.timing:
         return
     global last
     t = timer()
