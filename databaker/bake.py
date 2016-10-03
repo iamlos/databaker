@@ -161,9 +161,12 @@ def per_file(spreadsheet, recipe):
                     if Opt.preview:
                         make_preview()
 
-                    if Opt.csv:
+                    if Opt.csv and len(segment) != 0:
                         obs_count = len(segment)
                         progress = Progress(obs_count, 'Tab {}'.format(tab_num + 1))
+                        for ob in segment:
+                            csv.begin_observation_batch(ob.table)
+                            break   # quick way to get first element for now
                         for ob_num, ob in enumerate(segment):  # TODO use const
                             try:
                                 csv.handle_observation(ob)
@@ -171,7 +174,8 @@ def per_file(spreadsheet, recipe):
                                 crash_msg.append("ob: {!r}".format(ob))
                                 raise
                             progress.update(ob_num)
-                        print
+                        print()
+                        csv.finish_observation_batch()
                         
                     # hacky observation wiping
                     tab.headers = {}
