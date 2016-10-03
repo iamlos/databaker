@@ -157,6 +157,16 @@ def excel_ref(table, reference):
         return bag
 xypath.Table.excel_ref = excel_ref
 
+
+# duplicate of function in technicalcsv
+def dim_name(dimension):
+    if isinstance(dimension, int) and dimension <= 0:
+        # the last dimension is dimension 0; but we index it as -1.
+        return template.dimension_names[dimension-1]
+    else:
+        return dimension
+
+
 def append_dimension(table, label, func):
     if getattr(table, 'headers', None) is None:
         table.headers = {}
