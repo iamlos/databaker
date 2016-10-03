@@ -27,9 +27,6 @@ import xypath.loader
 import os.path
 from technicalcsv import TechnicalCSV
 
-import bake   # this has to go
-from constants import *
-
 import overrides        # warning: changes xypath and messytables
 import warnings
 import xlutils.copy
@@ -143,6 +140,7 @@ def per_file(spreadsheet, recipe):
     if Opt.csv:
         csv_file = filenames()['csv']
         csv = TechnicalCSV(csv_file, Opt.no_lookup_error)
+        
     tabs = list(xypath.loader.get_sheets(tableset, recipe.per_file(tableset)))
     if not tabs:
         print "No matching tabs found."
