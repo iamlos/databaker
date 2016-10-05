@@ -1,6 +1,5 @@
 from xypath import DOWN, UP, LEFT, RIGHT
 from hamcrest import *
-import csv
 
 # IF theres a custom template use it, Otherwise use the default.
 try:
