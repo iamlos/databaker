@@ -75,22 +75,24 @@ class TechnicalCSV(object):
         self.csv_writer = UnicodeWriter(self.filehandle)
         self.row_count = 0
         self.table = None
-        self.fullheaderrow = None
         self.batchrows = [ ]
         
-    def generate_header_row(self):
+    def generate_header_row(self, table):
+        assert self.table is None or self.table == table
         header_row = template.start.split(',')
 
         # create new header row
-        for i in range(self.table.max_header):
+        for i in range(table.max_header):
             header_row.extend(template.repeat.format(num=i+1).split(','))
 
         # overwrite dimensions/subject/name as column header (if requested)
+        print("hhh", header_row)
         if template.topic_headers_as_dims:
             dims = []
-            for dimension in range(1, self.table.max_header+1):
-                dims.append(self.table.headernames[dimension])
+            for dimension in range(1, table.max_header+1):
+                dims.append(table.headernames[dimension])
             header_row = rewrite_headers(header_row, dims)
+        print("kkkk", template.topic_headers_as_dims, header_row)
         return header_row
 
     def footer(self):
@@ -191,13 +193,21 @@ class TechnicalCSV(object):
     def begin_observation_batch(self, table):
         assert self.table is None or self.table == table
         self.table = table
-        self.fullheaderrow = self.generate_header_row() 
         assert len(self.batchrows) == 0
         
     def finish_observation_batch(self):
+        print("kkk", len(self.batchrows))
+        i = 0
         for values in self.batchrows:
             output_row = self.yield_dimension_values(values)
             self.output(output_row)
+            
+# output one piece to see what's going on
+            i += 1
+            if i == 2:
+                print(list(zip(self.csv.generate_header_row(self.table), self.yield_dimension_values(values))))
+            
+            
         self.batchrows = [ ]
         self.table = None
         
