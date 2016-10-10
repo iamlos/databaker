@@ -152,6 +152,9 @@ def per_file(spreadsheet, recipe):
         ## The callback into the recipe
         try:
             pertab = recipe.per_tab(tab)
+            
+            
+            
         except Exception:
             crash_msg.append("tab: {!r} {!r}".format(tab_num, tab.name))
             raise
@@ -159,8 +162,8 @@ def per_file(spreadsheet, recipe):
         # process the per_tab return value
         if isinstance(pertab, xypath.xypath.Bag):
             pertab = [pertab]
-        print("jjjk")
-        print(csv.generate_header_row(tab))
+        #print("jjjk")
+        #print(csv.generate_header_row(tab))
 
         try:
             for seg_id, segment in enumerate(pertab):

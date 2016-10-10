@@ -8,6 +8,7 @@ import warnings
 
 import xypath
 import messytables
+import technicalcsv
 import bake
 
 unicode = type(u'')
@@ -162,7 +163,7 @@ xypath.Table.excel_ref = excel_ref
 def dim_name(dimension):
     if isinstance(dimension, int) and dimension <= 0:
         # the last dimension is dimension 0; but we index it as -1.
-        return template.dimension_names[dimension-1]
+        return technicalcsv.template.dimension_names[dimension-1]
     else:
         return dimension
 
@@ -180,7 +181,7 @@ def append_dimension(table, label, func):
         assert isinstance(label, int)
         number = label
     table.headers[number] = func
-    bake.showtime("got header {}".format(bake.dim_name(label)))
+    bake.showtime("got header {}".format(dim_name(label)))
 xypath.Table.append_dimension = append_dimension
 
 def debug_dimensions(table):
@@ -211,7 +212,7 @@ def glue(bag, expand_function, join_function=None, blank=True):
 xypath.Bag.glue = glue
 
 def is_date(bag):
-    return bag.filter(lambda cell: bake.datematch(cell.value, silent=True))
+    return bag.filter(lambda cell: technicalcsv.datematch(cell.value, silent=True))
 xypath.Bag.is_date = is_date
 
 def is_number(bag):

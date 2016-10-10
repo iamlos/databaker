@@ -86,13 +86,13 @@ class TechnicalCSV(object):
             header_row.extend(template.repeat.format(num=i+1).split(','))
 
         # overwrite dimensions/subject/name as column header (if requested)
-        print("hhh", header_row)
+        #print("hhh", header_row)
         if template.topic_headers_as_dims:
             dims = []
             for dimension in range(1, table.max_header+1):
                 dims.append(table.headernames[dimension])
             header_row = rewrite_headers(header_row, dims)
-        print("kkkk", template.topic_headers_as_dims, header_row)
+        #print("kkkk", template.topic_headers_as_dims, header_row)
         return header_row
 
     def footer(self):
@@ -196,16 +196,16 @@ class TechnicalCSV(object):
         assert len(self.batchrows) == 0
         
     def finish_observation_batch(self):
-        print("kkk", len(self.batchrows))
+        #print("kkk", len(self.batchrows))
         i = 0
         for values in self.batchrows:
             output_row = self.yield_dimension_values(values)
             self.output(output_row)
             
 # output one piece to see what's going on
-            i += 1
-            if i == 2:
-                print(list(zip(self.csv.generate_header_row(self.table), self.yield_dimension_values(values))))
+#            i += 1
+#            if i == 2:
+#                print(list(zip(self.generate_header_row(self.table), self.yield_dimension_values(values))))
             
             
         self.batchrows = [ ]
