@@ -78,7 +78,7 @@ class TechnicalCSV(object):
         self.batchrows = [ ]
         
     def generate_header_row(self, table):
-        assert self.table is None or self.table == table
+        assert self.table is None or self.table is table
         header_row = template.start.split(',')
 
         # create new header row
@@ -140,7 +140,7 @@ class TechnicalCSV(object):
 
         for dimension in range(OBS+1, LAST_METADATA + 1):
             values[dimension] = self.value_for_dimension(obj, dimension)
-
+        
         # Mutate values
         # Special handling per dimension.
         # NOTE  - variables beginning SH_ ... are dependent on user choices from the template file
@@ -186,17 +186,16 @@ class TechnicalCSV(object):
 
     # try to put in the batching here
     def handle_observation(self, ob):
-        assert self.table == ob.table
+        assert self.table is ob.table
         values = self.extract_dimension_values_for_ob(ob)
         self.batchrows.append(values)
 
     def begin_observation_batch(self, table):
-        assert self.table is None or self.table == table
+        assert self.table is None or self.table is table
         self.table = table
         assert len(self.batchrows) == 0
         
     def finish_observation_batch(self):
-        #print("kkk", len(self.batchrows))
         i = 0
         for values in self.batchrows:
             output_row = self.yield_dimension_values(values)

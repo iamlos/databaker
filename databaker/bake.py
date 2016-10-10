@@ -183,8 +183,8 @@ def per_file(spreadsheet, recipe):
                         csv.csv_writer.writerow(csv.generate_header_row(tab))
                         bheaderoutput = True
                         
-                    for ob_num, ob in enumerate(segment):  
-                        assert ob.table == tab
+                    for ob_num, ob in enumerate(segment):
+                        assert tab is ob.table
                         try:
                             csv.handle_observation(ob)
                         except Exception:
