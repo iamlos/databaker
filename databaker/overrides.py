@@ -1,8 +1,6 @@
 """
 Patches xypath and messytables.
 """
-print("overrides0"); 
-
 import re
 import datetime
 import warnings
@@ -63,7 +61,7 @@ class Dimension(object):
         self.Dlabel = label
         
         # constant type
-        if isinstance(param1, basestring):
+        if isinstance(param1, str):
             self.strict = None
             self.string = param1
             self.subdim = []
@@ -232,7 +230,7 @@ def append_dimension(table, label, func):
         table.headers = {}
         table.max_header = 0
         table.headernames = [None]
-    if isinstance(label, basestring):
+    if isinstance(label, str):
         table.max_header += 1
         number = table.max_header
         table.headernames.append(label)
@@ -275,7 +273,7 @@ def is_date(bag):
 xypath.Bag.is_date = is_date
 
 def is_number(bag):
-    return bag.filter(lambda cell: isinstance(cell.value, (int, float, long)))
+    return bag.filter(lambda cell: isinstance(cell.value, (int, float)))
 xypath.Bag.is_number = is_number
 
 def group(bag, regex):

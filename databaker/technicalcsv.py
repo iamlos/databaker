@@ -47,7 +47,7 @@ def parse_ob(ob):
 
 def datematch(date, silent=False):
     """match mmm yyyy, mmm-mmm yyyy, yyyy Qn, yyyy"""
-    if not isinstance(date, basestring):
+    if not isinstance(date, str):
         if isinstance(date, float) and date>=1000 and date<=9999 and int(date)==date:
             return "Year"
         if not silent:
@@ -71,7 +71,7 @@ LAST_METADATA = 0 # since they're numbered -9 for obs, ... 0 for last one
 class TechnicalCSV(object):
     def __init__(self, filename, no_lookup_error):
         self.no_lookup_error = no_lookup_error
-        self.filehandle = open(filename, "wb")
+        self.filehandle = open(filename, "w")
         self.csv_writer = UnicodeWriter(self.filehandle)
         self.row_count = 0
         self.table = None
@@ -101,9 +101,7 @@ class TechnicalCSV(object):
 
     def output(self, row):
         def translator(s):
-            if not isinstance(s, basestring):
-                return unicode(s)
-            return unicode(s.replace('\n',' ').replace('\r', ' '))
+            return s # .replace('\n',' ').replace('\r', ' ')
         self.csv_writer.writerow([translator(item) for item in row])
         self.row_count += 1
 
@@ -111,7 +109,7 @@ class TechnicalCSV(object):
         try:
             cell = self.table.headers.get(dimension, lambda _: None)(obj)
         except xypath.xypath.NoLookupError:
-            print "no lookup to dimension {} from cell {}".format(dim_name(dimension), repr(obj))
+            print("no lookup to dimension {} from cell {}".format(dim_name(dimension), repr(obj)))
             if self.no_lookup_error:
                 cell = "NoLookupError"            # if user wants - output 'NoLookUpError' to CSV
             else:
@@ -122,7 +120,7 @@ class TechnicalCSV(object):
         cell = self.cell_for_dimension(obj, dimension)
         if cell is None:
             value = ''
-        elif isinstance(cell, (basestring, float)):
+        elif isinstance(cell, (str, float)):
             value = cell
         elif cell.properties['richtext']:
             value = richxlrd.RichCell(cell.properties.cell.sheet, cell.y, cell.x).fragments.not_script.value

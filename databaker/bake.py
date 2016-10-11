@@ -17,7 +17,11 @@ import codecs
 import imp
 import re
 import sys
-sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+#sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+
+# hack so paths work on J's computer
+#sys.path.append("/home/goatchurch/sensiblecode/xypath")
+#sys.path.append("/home/goatchurch/sensiblecode/messytables")
 
 from timeit import default_timer as timer
 
@@ -31,7 +35,6 @@ import overrides        # warning: changes xypath and messytables
 import warnings
 import xlutils.copy
 import xlwt
-import richxlrd.richxlrd as richxlrd
 from datetime import datetime
 import string
 
@@ -54,7 +57,7 @@ def showtime(msg='unspecified'):
         return
     global last
     t = timer()
-    print "{}: {:.3f}s,  {:.3f}s total".format(msg, t - last, t - start)
+    print("{}: {:.3f}s,  {:.3f}s total".format(str(msg), t - last, t - start))
     last = t
 
 def onexit():
@@ -97,7 +100,7 @@ class Progress(object):
         percent = (((count+1) * 100) // self.max_count)
         if percent != self.last_percent:
             progress = percent / 5
-            print self.msg.format(self.prefix, percent, '='*progress, " "*(20-progress)),
+            print(self.msg.format(self.prefix, percent, '='*int(progress), " "*(20-int(progress))), end="")
             sys.stdout.flush()
             self.last_percent = percent
 
@@ -143,7 +146,7 @@ def per_file(spreadsheet, recipe):
         
     tabs = list(xypath.loader.get_sheets(tableset, recipe.per_file(tableset)))
     if not tabs:
-        print "No matching tabs found."
+        print("No matching tabs found.")
         exit(1)
     bheaderoutput = False
     for tab_num, tab in enumerate(tabs):
@@ -168,7 +171,7 @@ def per_file(spreadsheet, recipe):
         try:
             for seg_id, segment in enumerate(pertab):
                 if Opt.debug:
-                    print "tab and segment available for interrogation"
+                    print("tab and segment available for interrogation")
                     import pdb; pdb.set_trace()
 
                 if Opt.preview:
@@ -236,9 +239,9 @@ def main():
         except Exception:
             crash_msg.append("fn: {!r}".format(fn))
             crash_msg.append("recipe: {!r}".format(Opt.recipe_file))
-            print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-            print '\n'.join(crash_msg)
-            print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+            print('\n'.join(crash_msg))
+            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
             raise
 
 if __name__ == '__main__':

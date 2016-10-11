@@ -1,5 +1,6 @@
-import csv, codecs, cStringIO
-
+import csv, codecs
+from io import BytesIO
+    
 class UTF8Recoder:
     """
     Iterator that reads an encoded stream and reencodes the input to UTF-8
@@ -36,9 +37,11 @@ class UnicodeWriter:
     which is encoded in the given encoding.
     """
 
+    # I have no idea why it was done like this
+    """
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
         # Redirect output to a queue
-        self.queue = cStringIO.StringIO()
+        self.queue = BytesIO()
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
@@ -54,7 +57,16 @@ class UnicodeWriter:
         self.stream.write(data)
         # empty queue
         self.queue.truncate(0)
+    """
 
+    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+        self.writer = csv.writer(f, dialect=dialect, **kwds)
+        self.stream = f
+       
+    def writerow(self, row):
+        #self.writer.writerow([s.encode("utf-8") for s in row])
+        self.writer.writerow(row)
+    
     def writerows(self, rows):
         for row in rows:
             self.writerow(row)
